@@ -146,11 +146,11 @@ const Contents: React.FC = () => {
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
                         <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                          {product.imageKey ? (
+                          {product.productImageKey || product.imageKey ? (
                             <img
                               className="h-10 w-10 rounded-full object-cover"
-                              src={`http://www.braincoach.kr/images/${product.imageKey}`}
-                              alt={product.name || '상품'}
+                              src={`http://www.braincoach.kr/images/${product.productImageKey || product.imageKey}`}
+                              alt={product.title || product.name || '상품'}
                             />
                           ) : (
                             <span className="text-gray-500">📦</span>

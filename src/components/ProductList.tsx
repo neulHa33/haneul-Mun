@@ -40,10 +40,10 @@ const ProductList: React.FC<ProductListProps> = ({
         >
           {/* Product Image */}
           <div className="h-48 bg-gray-100 flex items-center justify-center">
-            {product.imageKey ? (
+            {product.productImageKey || product.imageKey ? (
               <img
-                src={`https://example.com/images/${product.imageKey}`}
-                alt={product.name || '상품'}
+                src={`http://www.braincoach.kr/images/${product.productImageKey || product.imageKey}`}
+                alt={product.title || product.name || '상품'}
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
