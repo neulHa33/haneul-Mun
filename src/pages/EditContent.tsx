@@ -28,13 +28,12 @@ const EditContent: React.FC = () => {
     setIsLoading(true);
     try {
       const productData = await ApiService.getProductById(id);
-      console.log('Loaded product data:', productData);
       setProduct(productData);
       
-      // Map API response to form data - handle both new and legacy field names
+      // Map API response to form data
       setFormData({
-        title: productData.title || productData.name || '',
-        content: (productData.content || productData.description || '').replace(/<[^>]*>/g, ''), // Remove HTML tags
+        title: productData.title || '',
+        content: (productData.content || '').replace(/<[^>]*>/g, ''), // Remove HTML tags
         phoneNumber: productData.phoneNumber || '',
         startDate: productData.startDate || '',
         endDate: productData.endDate || '',
@@ -42,23 +41,9 @@ const EditContent: React.FC = () => {
         isActive: productData.isActive ?? true,
       });
       
-      // Set image data - handle both new and legacy field names
-      const imageKey = productData.productImageKey || productData.imageKey || '';
-      setImageKey(imageKey);
-      if (imageKey) {
-        setImagePreview(`http://www.braincoach.kr/images/${imageKey}`);
-      }
-      
-      console.log('Form data set:', {
-        title: productData.title || productData.name,
-        content: productData.content || productData.description,
-        phoneNumber: productData.phoneNumber,
-        startDate: productData.startDate,
-        endDate: productData.endDate,
-        postingPeriodType: productData.postingPeriodType,
-        isActive: productData.isActive,
-        imageKey: imageKey
-      });
+      // Set image data
+      setImageKey(productData.productImageKey || productData.imageKey || '');
+      setImagePreview(productData.productImageKey || productData.imageKey ? `http://www.braincoach.kr/images/${productData.productImageKey || productData.imageKey}` : '');
     } catch (error) {
       console.error('Error loading product:', error);
       alert('상품 데이터를 불러오는데 실패했습니다. 다시 시도해주세요.');
@@ -163,8 +148,8 @@ const EditContent: React.FC = () => {
       return;
     }
 
-    // Check if image upload was successful (only if no existing image)
-    if (!imageKey && !product?.productImageKey && !product?.imageKey) {
+    // Check if image upload was successful
+    if (!imageKey) {
       alert('상품 이미지를 업로드해주세요');
       return;
     }
@@ -179,7 +164,7 @@ const EditContent: React.FC = () => {
         endDate: formData.endDate,
         postingPeriodType: formData.postingPeriodType,
         isActive: formData.isActive,
-        productImageKey: imageKey || product?.productImageKey || product?.imageKey || '',
+        productImageKey: imageKey,
         companyId: '89d2e726-383e-448d-ba26-70fb7f77c6c3',
       };
 
